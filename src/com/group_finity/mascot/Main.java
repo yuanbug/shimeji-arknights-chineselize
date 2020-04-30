@@ -4,22 +4,20 @@ import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.config.Entry;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
-import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.imagesetchooser.ImageSetChooser;
 import com.group_finity.mascot.win.WindowsInteractiveWindowForm;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,8 +50,8 @@ public class Main {
     }
 
     private final Manager manager = new Manager();
-    private ArrayList<String> imageSets = new ArrayList<String>();
-    private Hashtable<String, Configuration> configurations = new Hashtable<String, Configuration>();
+    private ArrayList<String> imageSets = new ArrayList<>();
+    private Hashtable<String, Configuration> configurations = new Hashtable<>();
     private Properties properties = new Properties();
 
     public static Main getInstance() {
@@ -98,8 +96,7 @@ public class Main {
         try {
             input = new FileInputStream("./conf/settings.properties");
             properties.load(input);
-        } catch (FileNotFoundException ex) {
-        } catch (IOException ex) {
+        } catch (IOException ignored) {
         }
 
         // Get the image sets to use
@@ -164,22 +161,6 @@ public class Main {
 
             configurations.put(imageSet, configuration);
 
-        } catch (final IOException e) {
-            log.log(Level.SEVERE, "Failed to load configuration files", e);
-            Main.showError("Failed to load configuration files.\nSee log for more details.");
-            exit();
-        } catch (final SAXException e) {
-            log.log(Level.SEVERE, "Failed to load configuration files", e);
-            Main.showError("Failed to load configuration files.\nSee log for more details.");
-            exit();
-        } catch (final ParserConfigurationException e) {
-            log.log(Level.SEVERE, "Failed to load configuration files", e);
-            Main.showError("Failed to load configuration files.\nSee log for more details.");
-            exit();
-        } catch (final ConfigurationException e) {
-            log.log(Level.SEVERE, "Failed to load configuration files", e);
-            Main.showError("Failed to load configuration files.\nSee log for more details.");
-            exit();
         } catch (final Exception e) {
             log.log(Level.SEVERE, "Failed to load configuration files", e);
             Main.showError("Failed to load configuration files.\nSee log for more details.");
@@ -197,7 +178,7 @@ public class Main {
         log.log(Level.INFO, "create a tray icon");
 
         // "Another One!" menu item
-        final MenuItem increaseMenu = new MenuItem("Call Shimeji");
+        final JMenuItem increaseMenu = new JMenuItem("再次寻访");
         increaseMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 createMascot();
@@ -205,7 +186,7 @@ public class Main {
         });
 
         // "Follow One!" Menu item
-        final MenuItem gatherMenu = new MenuItem("Follow Cursor");
+        final JMenuItem gatherMenu = new JMenuItem("跟随鼠标");
         gatherMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 Main.this.getManager().setBehaviorAll(BEHAVIOR_GATHER);
@@ -213,7 +194,7 @@ public class Main {
         });
 
         // "Reduce to One!" menu item
-        final MenuItem oneMenu = new MenuItem("Reduce to One");
+        final JMenuItem oneMenu = new JMenuItem("减少到一个");
         oneMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 Main.this.getManager().remainOne();
@@ -221,7 +202,7 @@ public class Main {
         });
 
         // "Restore IE!" menu item
-        final MenuItem restoreMenu = new MenuItem("Restore Windows");
+        final JMenuItem restoreMenu = new JMenuItem("还原窗口");
         restoreMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 NativeFactory.getInstance().getEnvironment().restoreWindows();
@@ -229,7 +210,7 @@ public class Main {
         });
 
         // "Bye Everyone!" menu item
-        final MenuItem closeMenu = new MenuItem("Dismiss All");
+        final JMenuItem closeMenu = new JMenuItem("退出程序");
         closeMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 exit();
@@ -237,7 +218,7 @@ public class Main {
         });
 
         // settings
-        final MenuItem chooseShimejiMenu = new MenuItem("Choose Shimeji");
+        final JMenuItem chooseShimejiMenu = new JMenuItem("选择干员");
         chooseShimejiMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 boolean isExit = Main.this.getManager().isExitOnLastRemoved();
@@ -266,7 +247,7 @@ public class Main {
         });
 
         // "Interactive Windows" menu item
-        final MenuItem interactiveMenu = new MenuItem("Choose Interactive Windows");
+        final JMenuItem interactiveMenu = new JMenuItem("设置可交互窗口");
         interactiveMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 new WindowsInteractiveWindowForm(frame, true).display();
@@ -275,27 +256,43 @@ public class Main {
         });
 
         // Create the context "popup" menus.
-        final PopupMenu trayPopup = new PopupMenu();
-        final PopupMenu settingsMenu = new PopupMenu("Settings");
+        final JPopupMenu trayPopup = new JPopupMenu();
+        final JMenu settingsMenu = new JMenu("设置");
 
+        settingsMenu.add(chooseShimejiMenu);
+        settingsMenu.add(interactiveMenu);
         trayPopup.add(increaseMenu);
         trayPopup.add(gatherMenu);
         trayPopup.add(oneMenu);
         trayPopup.add(restoreMenu);
-        trayPopup.add(new MenuItem("-"));
         trayPopup.add(settingsMenu);
-        trayPopup.add(new MenuItem("-"));
         trayPopup.add(closeMenu);
-        settingsMenu.add(chooseShimejiMenu);
-        settingsMenu.add(interactiveMenu);
 
         try {
             // Create the tray icon
-            final TrayIcon icon = new TrayIcon(ImageIO.read(Main.class.getResource("/icon.png")), "shimeji-ee", trayPopup);
+            final TrayIcon icon = new TrayIcon(ImageIO.read(Main.class.getResource("/icon.png")), "shimeji-ee");
+            // 解决TrayIcon和JPopupMenu的兼容问题
+            icon.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    maybeShowPopup(e);
+                }
 
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    maybeShowPopup(e);
+                }
+
+                private void maybeShowPopup(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        trayPopup.setLocation(e.getX(), e.getY());
+                        trayPopup.setInvoker(trayPopup);
+                        trayPopup.setVisible(true);
+                    }
+                }
+            });
             // Show tray icon
             SystemTray.getSystemTray().add(icon);
-
         } catch (final IOException e) {
             log.log(Level.SEVERE, "Failed to create tray icon", e);
             Main.showError("Failed to display system tray.\nSee log for more details.");

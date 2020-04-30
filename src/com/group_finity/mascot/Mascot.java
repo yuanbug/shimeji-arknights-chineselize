@@ -198,7 +198,7 @@ public class Mascot {
         });
 
         // "Reduce to One!" menu item
-        final JMenuItem oneMenu = new JMenuItem("撤退其它干员");
+        final JMenuItem oneMenu = new JMenuItem("撤退其它相同干员");
         oneMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 getManager().remainOne(imageSet);

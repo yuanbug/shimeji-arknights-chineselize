@@ -68,7 +68,7 @@
                 <Pose Image="/stand.png" ImageAnchor="64,128" Velocity="0,0" Duration="250"/>
             </Animation>
         </Action>
-        <Action Name="SitAndSpinHeadAction" Type="Animate" BorderType="Floor">
+        <Action Name="坐下摇头Action" Type="Animate" BorderType="Floor">
             <Animation>
                 <Pose Image="/air.png" ImageAnchor="64,128" Velocity="0,0" Duration="1"/>
                 <Pose Image="/air.png" ImageAnchor="64,128" Velocity="0,0" Duration="3"/>
@@ -313,23 +313,23 @@
         <Action Name="StandUp" Type="Sequence" Loop="false">
             <ActionReference Name="Stand" Duration="${500+Math.random()*1000}"/>
         </Action>
-        <Action Name="Relaxing" Type="Sequence" Loop="false">
+        <Action Name="放松" Type="Sequence" Loop="false">
             <ActionReference Name="Idle" Duration="${500+Math.random()*1000}"/>
         </Action>
         <Action Name="特殊" Type="Sequence" Loop="false">
             <ActionReference Name="Busy" Duration="${500+Math.random()*1000}"/>
         </Action>
         +-
-        <Action Name="SitDown" Type="Sequence" Loop="false">
+        <Action Name="坐下" Type="Sequence" Loop="false">
             <ActionReference Name="Sit" Duration="${500+Math.random()*1000}"/>
         </Action>
-        <Action Name="Nap" Type="Sequence" Loop="false">
+        <Action Name="躺下" Type="Sequence" Loop="false">
             <ActionReference Name="Snooze" Duration="${500+Math.random()*1000}"/>
         </Action>
-        <Action Name="Sleep" Type="Sequence" Loop="true">
+        <Action Name="睡觉" Type="Sequence" Loop="true">
             <ActionReference Name="Sprawl" Duration="${500+Math.random()*1000}"/>
         </Action>
-        <Action Name="SitWhileDanglingLegs" Type="Sequence" Loop="false">
+        <Action Name="挂坐" Type="Sequence" Loop="false">
             <ActionReference Name="SitWithLegsUp" Duration="10"/>
             <ActionReference Name="SitWithLegsDown" Duration="${100+Math.random()*100}"/>
             <ActionReference Name="SitAndDangleLegs" Duration="${500+Math.random()*100}"/>
@@ -350,15 +350,15 @@
             <ActionReference Name="Offset" Y="1"/>
             <ActionReference Name="Stand"/>
         </Action>
-        <Action Name="WalkAlongWorkAreaFloor" Type="Sequence" Loop="false">
+        <Action Name="在地板上散步" Type="Sequence" Loop="false">
             <ActionReference Name="Walk"
                              TargetX="${mascot.environment.workArea.left+64+Math.random()*(mascot.environment.workArea.width-128)}"/>
         </Action>
-        <Action Name="RunAlongWorkAreaFloor" Type="Sequence" Loop="false">
+        <Action Name="在地板上奔跑" Type="Sequence" Loop="false">
             <ActionReference Name="Run"
                              TargetX="${mascot.environment.workArea.left+64+Math.random()*(mascot.environment.workArea.width-128)}"/>
         </Action>
-        <Action Name="CrawlAlongWorkAreaFloor" Type="Sequence" Loop="false">
+        <Action Name="在地板上爬行" Type="Sequence" Loop="false">
             <ActionReference Name="Creep"
                              TargetX="${mascot.environment.workArea.left+64+Math.random()*(mascot.environment.workArea.width-128)}"/>
         </Action>
@@ -398,15 +398,15 @@
             <ActionReference Name="Stand" Duration="${20+Math.random()*20}"/>
             <ActionReference Name="Sit" Duration="${500+Math.random()*1000}"/>
         </Action>
-        <Action Name="WalkAndGrabBottomLeftWall" Type="Sequence" Loop="false">
+        <Action Name="走到左边爬墙" Type="Sequence" Loop="false">
             <ActionReference Name="Run" TargetX="#{mascot.environment.workArea.left}"/>
             <ActionReference Name="ClimbWall" TargetY="#{mascot.environment.workArea.bottom-64}"/>
         </Action>
-        <Action Name="WalkAndGrabBottomRightWall" Type="Sequence" Loop="false">
+        <Action Name="走到右边爬墙" Type="Sequence" Loop="false">
             <ActionReference Name="Run" TargetX="#{mascot.environment.workArea.right}"/>
             <ActionReference Name="ClimbWall" TargetY="#{mascot.environment.workArea.bottom-64}"/>
         </Action>
-        <Action Name="JumpFromBottomOfIE" Type="Sequence" Loop="false">
+        <Action Name="跳起抓住上方窗口底部" Type="Sequence" Loop="false">
             <ActionReference Name="Jumping"
                              TargetX="${(mascot.anchor.x*3+mascot.environment.activeIE.left+Math.random()*mascot.environment.activeIE.width)/4}"
                              TargetY="${mascot.environment.activeIE.bottom}"/>
@@ -416,14 +416,14 @@
             <ActionReference Name="ClimbWall"
                              TargetY="${mascot.environment.workArea.top+64 + Math.random()*(mascot.environment.workArea.height-128)}"/>
         </Action>
-        <Action Name="ClimbAlongWall" Type="Sequence" Loop="false">
+        <Action Name="爬墙" Type="Sequence" Loop="false">
             <ActionReference Name="ClimbWall" TargetY="#{mascot.environment.workArea.top+64}"/>
             <ActionReference Name="Offset" Y="-64"/>
             <ActionReference Name="Look"/>
             <ActionReference Name="ClimbCeiling"
                              TargetX="${mascot.lookRight ? mascot.environment.workArea.left+Math.random()*100 : mascot.environment.workArea.right-Math.random*100}"/>
         </Action>
-        <Action Name="ClimbAlongCeiling" Type="Sequence" Loop="false">
+        <Action Name="爬天花板" Type="Sequence" Loop="false">
             <ActionReference Name="ClimbCeiling"
                              TargetX="${mascot.environment.workArea.left+64+Math.random()*(mascot.environment.workArea.width-128)}"/>
         </Action>
@@ -537,7 +537,7 @@
                              TargetY="${mascot.environment.activeIE.bottom-Math.random()*mascot.environment.activeIE.height/4}"/>
             <ActionReference Name="GrabWall" Duration="${100+Math.random()*100}"/>
         </Action>
-        <Action Name="ThrowIEFromLeft" Type="Sequence" Loop="false">
+        <Action Name="丢到窗口左边" Type="Sequence" Loop="false">
             <ActionReference Name="Jumping" TargetX="${mascot.environment.activeIE.left}"
                              TargetY="${mascot.environment.activeIE.bottom+64}"/>
             <ActionReference Name="FallWithIe"/>
@@ -547,7 +547,7 @@
             <ActionReference Name="Look"/>
             <ActionReference Name="Stand" Duration="${50+Math.random()*50}"/>
         </Action>
-        <Action Name="ThrowIEFromRight" Type="Sequence" Loop="false">
+        <Action Name="丢到窗口右边" Type="Sequence" Loop="false">
             <ActionReference Name="Jumping" TargetX="${mascot.environment.activeIE.right}"
                              TargetY="${mascot.environment.activeIE.bottom+64}"/>
             <ActionReference Name="FallWithIe"/>
@@ -557,7 +557,7 @@
             <ActionReference Name="Look"/>
             <ActionReference Name="Stand" Duration="${50+Math.random()*50}"/>
         </Action>
-        <Action Name="WalkAndThrowIEFromRight" Type="Sequence" Loop="false">
+        <Action Name="WalkAnd丢到窗口右边" Type="Sequence" Loop="false">
             <ActionReference Name="Jumping" TargetX="${mascot.environment.activeIE.left}"
                              TargetY="${mascot.environment.activeIE.bottom+64}"/>
             <ActionReference Name="FallWithIe"/>
@@ -567,7 +567,7 @@
             <ActionReference Name="Look"/>
             <ActionReference Name="Stand" Duration="${50+Math.random()*50}"/>
         </Action>
-        <Action Name="WalkAndThrowIEFromLeft" Type="Sequence" Loop="false">
+        <Action Name="WalkAnd丢到窗口左边" Type="Sequence" Loop="false">
             <ActionReference Name="Jumping" TargetX="${mascot.environment.activeIE.right}"
                              TargetY="${mascot.environment.activeIE.bottom+64}"/>
             <ActionReference Name="FallWithIe"/>
@@ -611,7 +611,7 @@
             <ActionReference Name="Dash" TargetX="#{mascot.environment.cursor.x+Gap}"
                              Gap="${ mascot.anchor.x &lt; mascot.environment.cursor.x ?      -Math.min( mascot.environment.cursor.x-mascot.anchor.x, Math.random()*200) :      Math.min( mascot.anchor.x-mascot.environment.cursor.x, Math.random()*200 ) }"/>
             <ActionReference Name="Look" LookRight="${mascot.anchor.x &lt; mascot.environment.cursor.x}"/>
-            <ActionReference Name="SitAndSpinHead"/>
+            <ActionReference Name="坐下摇头"/>
         </Action>
         <Action Name="坐下面朝鼠标" Type="Sequence" Loop="false">
             <ActionReference Name="SitAndLookAtMouse" Duration="${10+Math.random()*10}"/>
@@ -635,8 +635,8 @@
             <ActionReference Name="SitAndLookAtMouse" Duration="${10+Math.random()*10}"/>
             <ActionReference Name="Look" LookRight="${mascot.anchor.x &lt; mascot.environment.cursor.x}"/>
         </Action>
-        <Action Name="SitAndSpinHead" Type="Sequence" Loop="false">
-            <ActionReference Name="SitAndSpinHeadAction"/>
+        <Action Name="坐下摇头" Type="Sequence" Loop="false">
+            <ActionReference Name="坐下摇头Action"/>
         </Action>
     </ActionList>
 </Mascot>
