@@ -178,10 +178,19 @@ public class Main {
         log.log(Level.INFO, "create a tray icon");
 
         // "Another One!" menu item
-        final JMenuItem increaseMenu = new JMenuItem("再次寻访");
+        final JMenuItem increaseMenu = new JMenuItem("干员寻访");
         increaseMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 createMascot();
+            }
+        });
+
+        final JMenuItem increaseTenMenu = new JMenuItem("寻访十连");
+        increaseTenMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent event) {
+                for (int i = 0; i < 10; i++) {
+                    createMascot();
+                }
             }
         });
 
@@ -218,7 +227,7 @@ public class Main {
         });
 
         // settings
-        final JMenuItem chooseShimejiMenu = new JMenuItem("选择干员");
+        final JMenuItem chooseShimejiMenu = new JMenuItem("设置寻访池");
         chooseShimejiMenu.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 boolean isExit = Main.this.getManager().isExitOnLastRemoved();
@@ -262,6 +271,7 @@ public class Main {
         settingsMenu.add(chooseShimejiMenu);
         settingsMenu.add(interactiveMenu);
         trayPopup.add(increaseMenu);
+        trayPopup.add(increaseTenMenu);
         trayPopup.add(gatherMenu);
         trayPopup.add(oneMenu);
         trayPopup.add(restoreMenu);
